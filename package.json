@@ -1,0 +1,19 @@
+{
+  "name": "@otter-co/ottlib",
+  "version": "0.0.1",
+  "description": "Ben Otter's Libs",
+  "main": "bin/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benotter/ottlib.git"
+  },
+  "author": "Ben Otter <benotter@me.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/benotter/ottlib/issues"
+  },
+  "homepage": "https://github.com/benotter/ottlib#readme"
+}
