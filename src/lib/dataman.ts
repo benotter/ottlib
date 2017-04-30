@@ -54,5 +54,6 @@ export class DataGetter
 export interface DataResponse
 {
     success: boolean;
-    data?: object;
+    data?: any;
+    error?: any;
 }
