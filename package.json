@@ -1,7 +1,7 @@
 {
   "name": "@otter-co/ottlib",
   "version": "0.0.1",
-  "description": "Ben Otter's Libs",
+  "description": "Ben Otter's custom Libs for quick server-side app building",
   "main": "bin/index.js",
   "scripts": {
     "install": "npm run build",
@@ -17,5 +17,14 @@
   "bugs": {
     "url": "https://github.com/benotter/ottlib/issues"
   },
-  "homepage": "https://github.com/benotter/ottlib#readme"
+  "homepage": "https://github.com/benotter/ottlib#readme",
+  "devDependencies": {
+    "@types/node": "^7.0.13",
+    "@types/restify": "^2.0.42"
+  },
+  "dependencies": {
+    "mysql": "^2.13.0",
+    "restify": "^4.3.0",
+    "restify-cookies": "^0.2.2"
+  }
 }

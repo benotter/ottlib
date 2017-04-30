@@ -5,7 +5,8 @@
         "outDir": "./bin"
     },
     "include": [
-        "src"
+        "src",
+        "typings"
     ],
     "exclude": [
         "node_modules",
