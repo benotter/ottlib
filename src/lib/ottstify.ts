@@ -59,11 +59,13 @@ export class RestServer
                 case 'post':
                 server.post(UrlC.url, (req: any, res, next)=>
                 {
-                    let data = req.params;
+                    let rest = {req: req as restify.Request, res, next} as RestObj;
+                    let data = this.getParams(req);
 
-                    if(!data && req.body) 
-                        data = (typeof req.body === 'string') ? otil.safeJSON(req.body) : req.body;
-                    url.onLoad({req: req as restify.Request, res, next} as RestObj, data, req.cookies);
+                    if(!data && url.reqs & RestURL.reqs.dataReq)
+                        return url.onError(RestURL.reqs.dataReq, rest, data, req.cookies);
+                    
+                    url.onLoad(rest, data, req.cookies);
                 });
                 break;
             }
@@ -74,6 +76,23 @@ export class RestServer
     {
         return this.urls.add(urlC);
     }
+
+    private getReps(urlC: typeof RestURL)
+    {
+
+    }
+
+    private getParams(req)
+    {
+        let data = req.params;
+
+        if(!data && req.body)
+            data = (typeof req.body === 'string') ? otil.safeJSON(req.body) : req.body;
+        else if(!req.body)
+            data = null;
+
+        return data;
+    }
 }
 
 export default RestServer;
@@ -82,8 +101,13 @@ export class RestURL
 {
     public static url: string = "";
     public static type: string = "get";
+    public reqs: number = 0;
 
     protected dataG: DataGetters;
+
+    public static reqs = {
+        dataReq: 1,
+    }
     
     constructor(protected parent: RestServer, protected dm: DataManager, protected cfg: any)
     {
@@ -93,6 +117,18 @@ export class RestURL
     public async onLoad(rest: RestObj, data: any = null, cookies: any = null)
     {
         this.end(rest, {success: true} );
+    }
+
+    public async onError(reason: number, rest: RestObj, data: any = null, cookies: any = null)
+    {
+        let res;
+        switch(reason)
+        {
+            case RestURL.reqs.dataReq:
+            res = "No Params.";
+            break;
+        }
+        this.end(rest, {success: false, data: res});
     }
 
     public end(rest: RestObj, data: string | any)

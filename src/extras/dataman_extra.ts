@@ -82,18 +82,18 @@ export class MySQLDataGetter extends DataGetter implements DataGetter
         this.query(qu, cb);
     }
 
-    protected select(select: string | string[], where: any, cb: Function)
+    protected select(select: string | string[], where: any,  whereOvrd: string = " AND ", cb: Function)
     {
         select = Array.isArray(select) ? select.join(',') : select;
         
-        let qu = `SELECT ${select} FROM ${this.table} WHERE ${this.formSQL(where, ' AND ')};`;
+        let qu = `SELECT ${select} FROM ${this.table} WHERE ${this.formSQL(where, whereOvrd)};`;
 
         this.query(qu, cb);
     }
 
-    protected update(update: any, where: any, cb: Function)
+    protected update(update: any, where: any, whereOvrd: string = " AND ", cb: Function)
     {
-        let qu = `UPDATE ${this.table} SET ${this.formSQL(update)} WHERE ${this.formSQL(where)};`;
+        let qu = `UPDATE ${this.table} SET ${this.formSQL(update)} WHERE ${this.formSQL(where, whereOvrd)};`;
         this.query(qu, cb);
     }
 
@@ -119,7 +119,14 @@ export class MySQLDataGetter extends DataGetter implements DataGetter
         {
             ret = {};
             for(let pr in vals)
-                ret[pr] = db.escape(vals[pr]);
+            {
+                let v = vals[pr];
+                if(typeof v == "object")
+                    ret[pr] = this.escape(vals[pr]);
+                else
+                    ret[pr] = db.escape(vals[pr]);
+            }
+                
         }
         else
             ret = db.escape(vals);
