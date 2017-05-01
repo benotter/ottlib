@@ -22,12 +22,13 @@
   },
   "homepage": "https://github.com/benotter/ottlib#readme",
   "devDependencies": {
-    "@types/node": "^7.0.13",
-    "@types/restify": "^2.0.42",
+
     "dts-generator": "^2.1.0",
     "typescript": "^2.3.2"
   },
   "dependencies": {
+    "@types/node": "^7.0.13",
+    "@types/restify": "^2.0.42",
     "mysql": "^2.13.0",
     "restify": "^4.3.0",
     "restify-cookies": "^0.2.2"
