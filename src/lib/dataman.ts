@@ -1,19 +1,23 @@
-export default class DataManager
+export class DataManager
 {
-    public dataGetters: object = {};
+    public dataGetters: DataGetters = {};
 
-    constructor(
-        public dataCon: DataConnection
-        )
+    constructor(public dataCon: DataConnection)
     {
 
     }
 
-    addDataGetter(Getter: new (DataConnection)=>{serviceName: string })
+    addDataGetter(Getter: typeof DataGetter)
     {
         let a = new Getter(this.dataCon);
         this.dataGetters[a.serviceName] = a;
     }
+}
+export default DataManager;
+
+export interface DataGetters 
+{
+    [index: string]: DataGetter;
 }
 
 export class DataConnection
@@ -22,11 +26,11 @@ export class DataConnection
 
     public connection: any;
 
-    public open(): Promise<object>
+    public open(): Promise<DataResponse>
     {
         return new Promise((resolve, reject)=>{resolve({})});
     }
-    public close(): Promise<object>
+    public close(): Promise<DataResponse>
     {
         return new Promise((resolve, reject)=>{resolve({})});
     }
@@ -36,18 +40,25 @@ export class DataGetter
 {
     public serviceName: string = "data_getter";
 
-    constructor(private dataCon: DataConnection)
+    constructor(protected dataCon: DataConnection)
     {
 
     }
-
+    public add(data: any): Promise<DataResponse>
+    {
+        return new Promise((resolve, reject)=>{return resolve({success: true, data} as DataResponse);});
+    }
     public get(id: any): Promise<DataResponse>
     {
-        return new Promise((resolve, reject)=>{resolve({success: true, data: id} as DataResponse)});
+        return new Promise((resolve, reject)=>{return resolve({success: true, data: id} as DataResponse)});
     }
     public set(id: any, data: any): Promise<DataResponse>
     {
-        return new Promise((resolve, reject)=>{resolve({success: true, data} as DataResponse)});
+        return new Promise((resolve, reject)=>{return resolve({success: true, data} as DataResponse)});
+    }
+    public rid(id: any): Promise<DataResponse>
+    {
+        return new Promise((resolve, reject)=>{resolve({success: true, data: id} as DataResponse);});
     }
 }
 

@@ -2,14 +2,14 @@ import * as fs from 'fs';
 
 import * as otil from './utils.js';
 
-export default class ConfigHandler
+export class ConfigHandler
 {
     public config: object;
 
     private liveReload: boolean;
     private cfgPath: string;
 
-    constructor(cfgPath: string, defCfg, liveReload: boolean = false)
+    constructor(cfgPath: string, defCfg = {}, liveReload: boolean = false)
     {
         this.cfgPath = cfgPath;
         this.liveReload = liveReload;
@@ -24,19 +24,27 @@ export default class ConfigHandler
             {
                 this.updateConfig();
             });
-        else
-            this.updateConfig();
+
+        return this.updateConfig();
     }
     
-    private updateConfig()
+    private updateConfig(): Promise<any>
     {
-        fs.readFile(this.cfgPath, (err, data)=>
-        {
-            if(!err && data)
+        return new Promise((resolve, reject)=>{
+            fs.readFile(this.cfgPath, (err, data)=>
             {
-                let newCfg: object = otil.safeJSON(data.toString());
-                otil.updateShallowObj(this.config, newCfg);
-            }
+                if(!err && data)
+                {
+                    let newCfg: object = otil.safeJSON(data.toString());
+                    otil.deepUpdate(this.config, newCfg);
+                    resolve(this.config);
+                }
+                    
+                else
+                    reject(err);
+            });
         });
     }
 }
+
+export default ConfigHandler;

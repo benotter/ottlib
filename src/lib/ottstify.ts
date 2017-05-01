@@ -1,10 +1,10 @@
 import * as restify from 'restify';
 import * as restCookies from 'restify-cookies';
 
-import * as ottil from './utils';
-import DataManager from './dataman';
+import * as otil from './utils';
+import {DataManager, DataGetters, DataResponse} from './dataman';
 
-export default class RestServer 
+export class RestServer 
 {
     private domain: string;
     private server: restify.Server;
@@ -29,8 +29,9 @@ export default class RestServer
             server.use(plug);
     }
 
-    public start(): Promise<object>
+    public start(): Promise<DataResponse>
     {
+        this.setup();
         return new Promise((resolve, reject)=>
         {
             this.server.listen(this.cfg.port, (err)=>
@@ -47,22 +48,23 @@ export default class RestServer
     {
         let server = this.server;
 
-        for(let Url of this.urls)
+        for(let UrlC of this.urls)
         {
-            let url = new Url(this, this.dm)
-            switch(Url.type)
+            let url = new UrlC(this, this.dm, this.cfg)
+            switch(UrlC.type)
             {
-                case 'post':
-                    server.post(Url.url, (req: any, res, next)=>
-                    {
-                        let data = req.params || req.body && (typeof req.body === 'string') ? ottil.safeJSON(req.body) : req.body;
-                        url.onLoad({req: req as restify.Request, res, next} as RestObj, data, req.cookies);
-                    });
-                break;
-
                 case 'get':
                 case 'put':
                 case 'delete':
+                case 'post':
+                server.post(UrlC.url, (req: any, res, next)=>
+                {
+                    let data = req.params;
+
+                    if(!data && req.body) 
+                        data = (typeof req.body === 'string') ? otil.safeJSON(req.body) : req.body;
+                    url.onLoad({req: req as restify.Request, res, next} as RestObj, data, req.cookies);
+                });
                 break;
             }
         }
@@ -74,31 +76,35 @@ export default class RestServer
     }
 }
 
+export default RestServer;
+
 export class RestURL 
 {
     public static url: string = "";
     public static type: string = "get";
 
-    constructor(private parent: RestServer, private dm: DataManager)
+    protected dataG: DataGetters;
+    
+    constructor(protected parent: RestServer, protected dm: DataManager, protected cfg: any)
     {
-        
+        this.dataG = dm.dataGetters;
     }
 
-    public onLoad(rest: RestObj, data: any = null, cookies: any = null)
+    public async onLoad(rest: RestObj, data: any = null, cookies: any = null)
     {
         this.end(rest, {success: true} );
     }
 
-    public end(rest: RestObj, data: any)
+    public end(rest: RestObj, data: string | any)
     {
         let {res, req, next} = rest;
-
-        res.end(data);
+        let resP = typeof data == 'object' ? JSON.stringify(data) : data;
+        res.end(resP);
         next();
     }
 }
 
-interface RestObj
+export interface RestObj
 {
     req: restify.Request;
     res: restify.Response;

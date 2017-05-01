@@ -1,4 +1,4 @@
-import {DataConnection, DataGetter} from '../index';
+import {DataConnection, DataGetter, DataResponse} from '../index';
 import * as mysql from 'mysql';
 
 export class MySQLConnection extends DataConnection implements DataConnection 
@@ -13,7 +13,7 @@ export class MySQLConnection extends DataConnection implements DataConnection
         this.connection = mysql.createConnection(cfg);
     }
     
-    public open(): Promise<object>
+    public open(): Promise<DataResponse>
     {
         return new Promise((resolve, reject)=>
         {
@@ -27,7 +27,7 @@ export class MySQLConnection extends DataConnection implements DataConnection
         });
     }
 
-    public close(): Promise<object>
+    public close(): Promise<DataResponse>
     {
         return new Promise((resolve, reject)=>
         {
@@ -39,5 +39,91 @@ export class MySQLConnection extends DataConnection implements DataConnection
                     reject({success: false, err});
             });
         });
+    }
+}
+
+export class MySQLDataGetter extends DataGetter implements DataGetter 
+{
+    protected table: string;
+
+    constructor(protected dataCon: MySQLConnection)
+    {
+        super(dataCon);
+    }
+
+    private query(qu, cb)
+    {
+        let db = this.dataCon.connection;
+        db.query(qu, cb);
+    }
+
+    private formSQL(sql: any, dil: string = ','): string
+    {
+        let whA: string[] = [];
+        
+        for(let col in sql)
+            whA.push(`${col}=${sql[col]}`);
+
+        return whA.join(dil);
+    }
+
+    protected insert(data: any, cb)
+    {
+        let cols = [],
+            vals = [];
+
+        for(let col in data)
+        {
+            cols.push(col);
+            vals.push(data[col]);
+        }
+        
+        let qu = `INSERT INTO ${this.table} (${cols.join(',')}) VALUES (${vals.join(',')});`;
+        this.query(qu, cb);
+    }
+
+    protected select(select: string | string[], where: any, cb: Function)
+    {
+        select = Array.isArray(select) ? select.join(',') : select;
+        
+        let qu = `SELECT ${select} FROM ${this.table} WHERE ${this.formSQL(where, ' AND ')};`;
+
+        this.query(qu, cb);
+    }
+
+    protected update(update: any, where: any, cb: Function)
+    {
+        let qu = `UPDATE ${this.table} SET ${this.formSQL(update)} WHERE ${this.formSQL(where)};`;
+        this.query(qu, cb);
+    }
+
+    protected delete(where: string, cb: Function)
+    {
+        let qu = `DELETE FROM ${this.table} WHERE ${this.formSQL(where)};`;
+        this.query(qu, cb);
+    }
+
+    protected escape<T>(vals: string | string[] | object | T)
+    {
+        let db = this.dataCon.connection;
+
+        let ret: string | string[] | object | any;
+
+        if(Array.isArray(vals))
+        {
+            ret = vals;
+            for(let i in vals)
+                ret[i] = db.escape(vals[i]);
+        }
+        else if (typeof vals == "object")
+        {
+            ret = {};
+            for(let pr in vals)
+                ret[pr] = db.escape(vals[pr]);
+        }
+        else
+            ret = db.escape(vals);
+
+        return ret as T;
     }
 }

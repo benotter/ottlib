@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 
-export default class Logger 
+export class Logger 
 {
     private logDir: string;
     private logInConsole: boolean;
@@ -27,6 +27,8 @@ export default class Logger
         
     }
 }
+
+export default Logger;
 
 export class LogType 
 {
