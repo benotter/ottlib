@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Ben Otter's custom Libs for quick server-side app building",
   "main": "bin/index.js",
-  "types":"src/index.ts",
+  "types": "src/index.ts",
   "scripts": {
     "install": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -23,7 +23,8 @@
   "devDependencies": {
     "@types/node": "^7.0.13",
     "@types/restify": "^2.0.42",
-    "dts-generator": "^2.1.0"
+    "dts-generator": "^2.1.0",
+    "typescript": "^2.3.2"
   },
   "dependencies": {
     "mysql": "^2.13.0",
