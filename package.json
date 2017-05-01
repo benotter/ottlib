@@ -4,6 +4,7 @@
   "description": "Ben Otter's custom Libs for quick server-side app building",
   "main": "bin/index.js",
   "types": "src/index.ts",
+  "readme": "README.MD",
   "scripts": {
     "install": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
