@@ -97,7 +97,7 @@ export class MySQLDataGetter extends DataGetter implements DataGetter
         this.query(qu, cb);
     }
 
-    protected delete(where: string, cb: Function)
+    protected delete(where: any, cb: Function)
     {
         let qu = `DELETE FROM ${this.table} WHERE ${this.formSQL(where)};`;
         this.query(qu, cb);
