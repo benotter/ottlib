@@ -11,11 +11,14 @@ export class RestServer
 
     private urls: Set<typeof RestURL> = new Set();
 
+    private restConf: any;
+
     constructor(private cfg: any, private dm: DataManager)
     {
-        this.domain = cfg.domain || "";
+        let restConf = this.restConf = cfg.restConf || cfg;
+        this.domain = restConf.domain || "";
 
-        let server = this.server = restify.createServer(cfg);
+        let server = this.server = restify.createServer(restConf);
 
         let serverPlugs = [
             restify.bodyParser({mapFiles: true}),
@@ -34,7 +37,7 @@ export class RestServer
         this.setup();
         return new Promise((resolve, reject)=>
         {
-            this.server.listen(this.cfg.port, (err)=>
+            this.server.listen(this.restConf.port, (err)=>
             {
                 if(!err)
                     resolve({success: true});
