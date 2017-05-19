@@ -109,24 +109,24 @@ export class MySQLDataGetter extends DataGetter implements DataGetter
 
         let ret: string | string[] | object | any;
 
-        if(Array.isArray(vals))
-        {
-            ret = vals;
-            for(let i in vals)
-                ret[i] = db.escape(vals[i]);
-        }
-        else if (typeof vals == "object")
+        if (typeof vals == "object")
         {
             ret = {};
             for(let pr in vals)
             {
+                if(pr === 'undefined')
+                {
+                    delete ret[pr];
+                    continue;
+                }
+                    
                 let v = vals[pr];
+
                 if(typeof v == "object")
                     ret[pr] = this.escape(vals[pr]);
                 else
                     ret[pr] = db.escape(vals[pr]);
             }
-                
         }
         else
             ret = db.escape(vals);

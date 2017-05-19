@@ -8,7 +8,7 @@
   "scripts": {
     "install": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc -p",
+    "build": "tsc -p .",
     "gentypes": "dts-generator --name @otter-co/ottlib/src --project ./ --out ./bin/index.d.ts"
   },
   "repository": {
