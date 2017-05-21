@@ -20,7 +20,17 @@ export class MySQLConnection extends DataConnection implements DataConnection
             this.connection.connect((err)=>
             {
                 if(!err)
+                {
                     resolve({success: true});
+                    
+                    let listener = (err)=>
+                    {
+                        this.connection.removeListener("close", listener);
+                        this.open();
+                    };
+
+                    this.connection.on("close", listener);
+                }
                 else
                     reject({success: false, err});
             });
