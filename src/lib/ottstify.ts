@@ -53,7 +53,8 @@ export class RestServer
 
         for(let UrlC of this.urls)
         {
-            let url = new UrlC(this, this.dm, this.cfg)
+            let url = new UrlC(this, this.dm, this.cfg);
+            
             switch(UrlC.type)
             {
                 case 'get':
