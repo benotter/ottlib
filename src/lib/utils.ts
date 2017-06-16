@@ -40,3 +40,18 @@ export function deepUpdate<T>(old: any, newO: any): T
 
     return old as T;
 }
+
+export function getObjPropList(obj, curP = "", retO = {})
+    {
+        for(let prop in obj)
+            if(obj.hasOwnProperty(prop))
+            {
+                let val = obj[prop];
+                if(typeof val === "object")
+                    getObjPropList(val, curP + prop + '.', retO);
+                else
+                    retO[curP + prop] = val;
+            };
+
+        return retO;
+    };

@@ -7,7 +7,11 @@ export * from './lib/config';
 export * from './lib/dataman';
 export * from './lib/utils';
 
-import * as dman_extras from './extras/dataman_extra';
+import * as mysql_extra from './extras/mysql_extra';
+import * as mongodb_extra from './extras/mongodb_extra';
 
-export let dataman_extras = dman_extras;
+export let extras = {
+    mysql_extra,
+    mongodb_extra
+};
 
