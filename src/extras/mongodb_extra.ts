@@ -17,7 +17,12 @@ export class MongoDBConnection extends DataConnection implements DataConnection
     {
         return new Promise((resolve, reject)=>
         {
-            mongo.MongoClient.connect(this.cfg, (err, db)=>
+            let cfg = this.cfg;
+
+            //Yea, this is kinda a monster, hardcoding in creds-required and all that, but Oh Well, need it done asap.
+            let addr = `mongodb://${cfg.user}:${cfg.password}@${cfg.host}:${cfg.port}/${cfg.database}?authSource=admin`;
+
+            mongo.MongoClient.connect(addr, (err, db)=>
             {
                 if(!err)
                 {
