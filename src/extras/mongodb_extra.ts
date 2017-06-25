@@ -60,7 +60,7 @@ export class MongoDBDataGetter extends DataGetter implements DataGetter
 {
     public table: string;
 
-    private collection: mongo.Collection;
+    public collection: mongo.Collection;
 
     constructor(protected dataCon: MongoDBConnection)
     {
