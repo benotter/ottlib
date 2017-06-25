@@ -78,28 +78,28 @@ export class MongoDBDataGetter extends DataGetter implements DataGetter
         if(!this.collection)
             this.getCollection();
 
-        this.collection.insert(data, cb);
+        return this.collection.insert(data, cb);
     };
     protected select(select: string | string[], where: any,  whereOvrd: string = " AND ", cb: Function)
     {
         if(!this.collection)
             this.getCollection();
             
-        this.collection.find(where, cb);
+        return this.collection.find(where, cb);
     };
     protected update(update: any, where: any, whereOvrd: string = " AND ", cb: Function)
     {
         if(!this.collection)
             this.getCollection();
             
-        this.collection.update(where, { '$set': otil.getObjPropList(update) }, cb);
+        return this.collection.update(where, { $set: otil.getObjPropList(update) }, cb);
     };
     protected delete(where: any, cb: Function)
     {
         if(!this.collection)
             this.getCollection();
             
-        this.collection.deleteOne(where, cb);
+        return this.collection.deleteOne(where, cb);
     };
 
     protected escape<T>(vals: string | string[] | object | T): T
