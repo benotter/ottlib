@@ -1,6 +1,6 @@
 {
   "name": "@otter-co/ottlib",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Ben Otter's custom Libs for quick server-side app building",
   "main": "bin/index.js",
   "types": "src/index.ts",
