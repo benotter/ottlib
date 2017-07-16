@@ -67,18 +67,35 @@ export class MongoDBDataGetter extends DataGetter implements DataGetter
         super(dataCon);
     }
 
+    public aggregate(data: any = {}): Promise<DataResponse>
+    {
+        if(!this.collection)
+            this.getCollection();
+
+        return new Promise((res, rej)=>
+        {
+            this.collection.aggregate(data, (err, res: any)=>
+            {
+                if(!err)
+                    res({success: true, data: res});
+                else
+                    rej({success: true, data: err});
+            });
+        });
+    }
+
     private getCollection()
     {
         if(!this.collection)
             this.collection = this.dataCon.connection.collection(this.table);
     }
 
-    protected insert(data: any, cb: Function)
+    protected insert(data: any, cb: mongo.MongoCallback<mongo.InsertWriteOpResult>)
     {
         if(!this.collection)
             this.getCollection();
 
-        return this.collection.insert(data, cb);
+        return this.collection.insertOne(data, cb);
     };
     protected select(select: string | string[], where: any,  whereOvrd: string = " AND ", cb: Function)
     {
@@ -87,14 +104,14 @@ export class MongoDBDataGetter extends DataGetter implements DataGetter
             
         return this.collection.find(where, cb);
     };
-    protected update(update: any, where: any, whereOvrd: string = " AND ", cb: Function)
+    protected update(update: any, where: any, whereOvrd: string = " AND ", cb: mongo.MongoCallback<mongo.WriteOpResult>)
     {
         if(!this.collection)
             this.getCollection();
             
         return this.collection.update(where, { $set: otil.getObjPropList(update) }, cb);
     };
-    protected delete(where: any, cb: Function)
+    protected delete(where: any, cb: mongo.MongoCallback<mongo.DeleteWriteOpResultObject>)
     {
         if(!this.collection)
             this.getCollection();
