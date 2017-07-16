@@ -90,7 +90,7 @@ export class MongoDBDataGetter extends DataGetter implements DataGetter
             this.collection = this.dataCon.connection.collection(this.table);
     }
 
-    protected insert(data: any, cb: mongo.MongoCallback<mongo.InsertWriteOpResult>)
+    protected insert(data: any, cb: any)
     {
         if(!this.collection)
             this.getCollection();
@@ -104,14 +104,14 @@ export class MongoDBDataGetter extends DataGetter implements DataGetter
             
         return this.collection.find(where, cb);
     };
-    protected update(update: any, where: any, whereOvrd: string = " AND ", cb: mongo.MongoCallback<mongo.WriteOpResult>)
+    protected update(update: any, where: any, whereOvrd: string = " AND ", cb: any)
     {
         if(!this.collection)
             this.getCollection();
             
         return this.collection.update(where, { $set: otil.getObjPropList(update) }, cb);
     };
-    protected delete(where: any, cb: mongo.MongoCallback<mongo.DeleteWriteOpResultObject>)
+    protected delete(where: any, cb: any)
     {
         if(!this.collection)
             this.getCollection();
