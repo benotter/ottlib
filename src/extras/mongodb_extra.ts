@@ -67,12 +67,12 @@ export class MongoDBDataGetter extends DataGetter implements DataGetter
         super(dataCon);
     }
 
-    public aggregate(data: any = {})
+    public aggregate(data: any = {}, cb = null)
     {
         if(!this.collection)
             this.getCollection();
 
-        return this.collection.aggregate(data);
+        return this.collection.aggregate(data, cb);
     }
 
     private getCollection()
