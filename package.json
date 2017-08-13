@@ -1,6 +1,6 @@
 {
   "name": "@otter-co/ottlib",
-  "version": "0.2.5",
+  "version": "0.2.7",
   "description": "Ben Otter's custom Libs for quick server-side app building",
   "main": "bin/index.js",
   "types": "src/index.ts",
@@ -23,7 +23,7 @@
   "homepage": "https://github.com/benotter/ottlib#readme",
   "devDependencies": {
     "dts-generator": "^2.1.0",
-    "typescript": "^2.3.2"
+    "typescript": "^2.4.2 "
   },
   "dependencies": {
     "@types/mongodb": "^2.2.5",

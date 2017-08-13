@@ -50,6 +50,11 @@ export class DataGetter
         return new Promise((resolve, reject)=>{return resolve({success: true, data: {whr}} as DataResponse);});
     }
 
+    public agg(whr: any): any
+    {
+        return this.aggregate(whr);
+    }
+
     public add(data: any): Promise<DataResponse>
     {
         return new Promise((resolve, reject)=>{return resolve({success: true, data} as DataResponse);});
