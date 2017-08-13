@@ -28,11 +28,11 @@ export class DataConnection
 
     public open(): Promise<DataResponse>
     {
-        return new Promise((resolve, reject)=>{resolve({})});
+        return new Promise((resolve, reject)=>{resolve({success: true})});
     }
     public close(): Promise<DataResponse>
     {
-        return new Promise((resolve, reject)=>{resolve({})});
+        return new Promise((resolve, reject)=>{resolve({success: true})});
     }
 }
 
@@ -45,7 +45,7 @@ export class DataGetter
 
     }
 
-    public aggregate(whr: any): Promise<DataResponse>
+    public aggregate(whr: any): any
     {
         return new Promise((resolve, reject)=>{return resolve({success: true, data: {whr}} as DataResponse);});
     }

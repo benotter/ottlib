@@ -67,21 +67,12 @@ export class MongoDBDataGetter extends DataGetter implements DataGetter
         super(dataCon);
     }
 
-    public aggregate(data: any = {}): Promise<DataResponse>
+    public aggregate(data: any = {})
     {
         if(!this.collection)
             this.getCollection();
 
-        return new Promise((res, rej)=>
-        {
-            this.collection.aggregate(data, (err, res: any)=>
-            {
-                if(!err)
-                    res({success: true, data: res});
-                else
-                    rej({success: true, data: err});
-            });
-        });
+        return this.collection.aggregate(data);
     }
 
     private getCollection()
