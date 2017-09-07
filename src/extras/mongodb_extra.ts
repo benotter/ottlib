@@ -88,12 +88,15 @@ export class MongoDBDataGetter extends DataGetter implements DataGetter
 
         return this.collection.insertOne(data, cb);
     };
-    protected select(select: string | string[], where: any,  whereOvrd: string = " AND ", cb: Function)
+    protected select(select: any, where: any,  whereOvrd: string = " AND ", cb: any)
     {
         if(!this.collection)
             this.getCollection();
-            
-        return this.collection.find(where, cb);
+        
+        if(!select)
+            return this.collection.find(where, cb);
+        else
+            return this.collection.find(where, select, cb);
     };
     protected update(update: any, where: any, whereOvrd: string = " AND ", cb: any)
     {
