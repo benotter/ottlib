@@ -1,3 +1,8 @@
+/**
+ * index.ts
+ * 
+ * Main Export file for sub-libraries
+ */
 export default {name: 'OttLib', org: 'Otter-Co'};
 
 export * from './lib/ottstify';

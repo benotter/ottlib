@@ -1,4 +1,4 @@
-Ben Otter's Basic BootStrap Libs
+Ben Otter's Basic BootStrap JS Libs
 ---
 ___
 To Install:

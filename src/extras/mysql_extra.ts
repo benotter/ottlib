@@ -1,6 +1,16 @@
+/*
+ * mysql_extra.ts
+ * 
+ * Contains a DataConnection and DataGetter for MySQL. 
+ */
 import {DataConnection, DataGetter, DataResponse} from '../index';
 import * as mysql from 'mysql';
 
+/**
+ * DataConnection for MySQL
+ * @extends {DataConnection}
+ * @implements {DataConnection}
+ */
 export class MySQLConnection extends DataConnection implements DataConnection 
 {
     public serviceName = "MySQL Connection";
@@ -52,6 +62,11 @@ export class MySQLConnection extends DataConnection implements DataConnection
     }
 }
 
+/**
+ * DataGetter for MySQL
+ * @extends {DataGetter}
+ * @implements {DataGetter}
+ */
 export class MySQLDataGetter extends DataGetter implements DataGetter 
 {
     protected table: string;
@@ -113,7 +128,7 @@ export class MySQLDataGetter extends DataGetter implements DataGetter
         this.query(qu, cb);
     }
 
-    protected escape<T>(vals: string | string[] | object | T)
+    protected escape<T>(vals: any | string | string[] | object | T)
     {
         let db = this.dataCon.connection;
 

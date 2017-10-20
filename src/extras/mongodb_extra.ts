@@ -1,7 +1,18 @@
+/*
+ * mongodb_extra.js
+ * 
+ * Contains a DataConection and DataGetter for MongoDB
+ */
+
 import {DataConnection, DataGetter, DataResponse} from '../index';
 import * as mongo from 'mongodb';
 import * as otil from '../lib/utils';
 
+/**
+ * DataConnection for MongoDB
+ * @implements {DataConnection}
+ * @extends {DataConnection}
+ */
 export class MongoDBConnection extends DataConnection implements DataConnection
 {
     public serviceName = "MongoDB Connection";
@@ -12,7 +23,9 @@ export class MongoDBConnection extends DataConnection implements DataConnection
     {
         super();
     }
-
+    /**
+     * Opens the MongoDB Connection
+     */
     public open(): Promise<DataResponse>
     {
         return new Promise((resolve, reject)=>
@@ -34,7 +47,9 @@ export class MongoDBConnection extends DataConnection implements DataConnection
             });
         });
     }
-
+    /**
+     * Closes the MongoDB Connection
+     */
     public close(): Promise<DataResponse> 
     {
         return new Promise((resolve, reject)=>{
@@ -56,6 +71,11 @@ export class MongoDBConnection extends DataConnection implements DataConnection
     }
 }
 
+/**
+ * A DataGetter for MongoDB
+ * @implements {DataGetter}
+ * @extends {DataGetter}
+ */
 export class MongoDBDataGetter extends DataGetter implements DataGetter 
 {
     public table: string;
@@ -67,18 +87,18 @@ export class MongoDBDataGetter extends DataGetter implements DataGetter
         super(dataCon);
     }
 
+    private getCollection()
+    {
+        if(!this.collection)
+            this.collection = this.dataCon.connection.collection(this.table);
+    }
+
     public aggregate(data: any = {}, cb = null)
     {
         if(!this.collection)
             this.getCollection();
 
         return this.collection.aggregate(data, cb);
-    }
-
-    private getCollection()
-    {
-        if(!this.collection)
-            this.collection = this.dataCon.connection.collection(this.table);
     }
 
     protected insert(data: any, cb: any)
@@ -88,6 +108,7 @@ export class MongoDBDataGetter extends DataGetter implements DataGetter
 
         return this.collection.insertOne(data, cb);
     };
+
     protected select(select: any, where: any,  whereOvrd: string = " AND ", cb: any)
     {
         if(!this.collection)

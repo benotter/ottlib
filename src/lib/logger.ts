@@ -1,3 +1,9 @@
+/**
+ * logger.ts
+ * Otter's Logging Library
+ * 
+ * TODO: Actually Write it
+ */
 import * as fs from 'fs';
 
 export class Logger 
